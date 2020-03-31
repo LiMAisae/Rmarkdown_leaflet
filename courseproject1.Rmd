@@ -1,0 +1,40 @@
+---
+title: "Covid-19 infected cases in the Paris region"
+author: "Li"
+date: "31/03/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Discription
+
+This page presents the Covid-19 infected cases in the Paris region, including Paris city and the surrouding departments Seine-et-Marne, Yvelines, Essonne, Hauts-de-Seine, Seine-Saint-Denis, Val-de-Marne, Val-d'Oise. The data contain hospitalized persons, persons under intensive care, deaths and persons being quarantined at home. 
+In the map, the size of each circle is proportionnal to the local hospitalized persons number. 
+
+The data are updated on 30/03/2020.
+
+```{r echo=FALSE, message=FALSE}
+library(leaflet)
+
+
+maps <- data.frame(name = c("Paris","Seine-et-Marne", "Yvelines","Essonne", "Hauts-de-Seine","Seine-Saint-Denis", "Val-de-Marne","Val-d'Oise"),
+                        hop = c(2217, 468,594, 586,
+                                1286,863,1030, 645),
+                        death=c(306,45,80,43,127,124,102,127),
+                        rea=c(597,138,137,141,293,163,186,137),
+                        quarantine=c(607,160,232,133,378,222,299,363),
+                   
+                        latitude = c(48.857, 48.541648, 48.803738, 48.628779, 48.897384, 48.938199, 48.782199, 49.035560),
+                        longitude = c(2.347745, 2.655851, 2.125510, 2.430671, 2.215308,  2.357225,  2.450893,  2.077801))
+maps %>%
+  leaflet() %>%
+  addTiles() %>%
+  addCircles(weight = 1, radius = sqrt(maps$hop) * 200, color='red')%>%
+  addMarkers(popup = paste(maps$name,", hospitalized:", maps$hop, ", intensive care:", maps$rea, ", death:", maps$death,  ", quarantine :",maps$quarantine) )
+
+```
+
+
